@@ -1,0 +1,1773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catalogue</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Paper / archival palette */
+    --paper:        #f1ead7;
+    --paper-2:      #e7decb;
+    --paper-3:      #d8ccb3;
+    --ink:          #1a2a2e;
+    --ink-2:        #3a4a4e;
+    --ink-3:        #6b7878;
+
+    /* Greens & blues */
+    --teal-deep:    #1d4742;
+    --teal:         #2a6660;
+    --teal-soft:    #c2d1cc;
+    --blue-deep:    #1a3656;
+    --blue:         #2a5582;
+    --blue-soft:    #c4d2dd;
+    --moss:         #455f3a;
+    --moss-soft:    #cdd5bf;
+
+    --shadow:       0 1px 2px rgba(28, 58, 94, 0.05), 0 4px 12px rgba(28, 58, 94, 0.04);
+    --shadow-lift:  0 2px 4px rgba(28, 58, 94, 0.08), 0 8px 24px rgba(28, 58, 94, 0.07);
+
+    --radius:       4px;
+    --radius-lg:    6px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { overflow-y: scroll; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, sans-serif;
+    font-size: 16px;
+    line-height: 1.55;
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse 80% 60% at 30% 20%, rgba(29, 71, 66, 0.03) 0%, transparent 60%),
+      radial-gradient(ellipse 70% 50% at 80% 90%, rgba(26, 54, 86, 0.03) 0%, transparent 60%);
+  }
+
+  .app { max-width: 1320px; margin: 0 auto; padding: 0 32px 80px; }
+
+  /* ===== Header ===== */
+  header {
+    padding: 48px 0 8px;
+    border-bottom: 1px solid var(--paper-3);
+  }
+  .header-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 24px;
+  }
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+  .logo {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 42px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.5px;
+    line-height: 1;
+  }
+  .logo-mark {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    color: var(--moss);
+    font-weight: 600;
+  }
+  .tagline {
+    color: var(--ink-3);
+    font-style: italic;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 17px;
+  }
+
+  /* ===== Tabs ===== */
+  .tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: -1px;
+  }
+  .tab {
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 12px 24px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--ink-3);
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+    letter-spacing: 0.02em;
+  }
+  .tab:hover { color: var(--ink-2); }
+  .tab.active {
+    color: var(--teal-deep);
+    border-bottom-color: var(--teal-deep);
+    font-weight: 600;
+  }
+
+  /* ===== Search Panel ===== */
+  .search-panel {
+    background: var(--paper-2);
+    border: 1px solid var(--paper-3);
+    border-radius: var(--radius-lg);
+    padding: 24px 28px;
+    margin: 32px 0 28px;
+  }
+  .search-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .search-input-wrap {
+    flex: 1;
+    position: relative;
+  }
+  .search-input-wrap svg {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--ink-3);
+  }
+  .search-input-wrap input {
+    width: 100%;
+    background: var(--paper);
+    border: 1px solid var(--paper-3);
+    border-radius: var(--radius);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    padding: 13px 16px 13px 46px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .search-input-wrap input:focus {
+    border-color: var(--teal-deep);
+    box-shadow: 0 0 0 3px rgba(31, 78, 74, 0.1);
+  }
+  .btn-search {
+    background: var(--teal-deep);
+    border: 1px solid var(--teal-deep);
+    color: var(--paper);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 13px 32px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 0.15s;
+    letter-spacing: 0.02em;
+  }
+  .btn-search:hover { background: var(--teal); }
+
+  /* ===== Filter rows ===== */
+  .controls-row {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .control-group > label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-3);
+  }
+
+  /* Source chips */
+  .source-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    padding: 7px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--paper-3);
+    background: var(--paper);
+    color: var(--ink-2);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    user-select: none;
+    line-height: 1.4;
+  }
+  .chip:hover {
+    border-color: var(--teal);
+    color: var(--teal-deep);
+  }
+  .chip.active {
+    background: var(--teal-soft);
+    border-color: var(--teal-deep);
+    color: var(--teal-deep);
+    font-weight: 600;
+  }
+  .chip .dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+  .dot-nara         { background: #6b4a2b; }
+  .dot-dpla         { background: #2a5a8b; }
+  .dot-iarchive     { background: #2c3e50; }
+
+  /* Size toggles */
+  .toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .toggle-label {
+    font-size: 13px;
+    color: var(--ink-2);
+    font-weight: 500;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+  }
+  .toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 36px;
+    height: 20px;
+    flex-shrink: 0;
+  }
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+  .toggle-track {
+    position: absolute;
+    inset: 0;
+    background: var(--paper-3);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .toggle-track::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    background: var(--paper);
+    border-radius: 50%;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+  }
+  .toggle-switch input:checked + .toggle-track {
+    background: var(--teal-deep);
+  }
+  .toggle-switch input:checked + .toggle-track::after { transform: translateX(16px); }
+
+  /* License notice */
+  .license-notice {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: var(--moss-soft);
+    border: 1px solid var(--moss);
+    border-radius: var(--radius);
+    font-size: 12px;
+    color: var(--moss);
+    font-weight: 500;
+  }
+  .license-notice svg { flex-shrink: 0; }
+
+  /* ===== Status bar ===== */
+  .status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4px 16px;
+    font-size: 13px;
+    color: var(--ink-3);
+    min-height: 32px;
+  }
+  .status-bar strong { color: var(--ink); font-weight: 600; }
+
+  /* ===== Results grid ===== */
+  .results-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+  }
+  .tile {
+    position: relative;
+    background: var(--paper-2);
+    border: 1px solid var(--paper-3);
+    border-radius: var(--radius);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    aspect-ratio: 1 / 1;
+  }
+  .tile:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lift);
+    border-color: var(--teal);
+  }
+  .tile img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .tile-meta {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: rgba(26, 42, 46, 0.78);
+    color: var(--paper);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 4px 8px;
+    border-top-left-radius: var(--radius);
+    font-family: 'Inter', sans-serif;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+  .tile-source {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(246, 242, 234, 0.9);
+    color: var(--ink-2);
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  /* ===== Empty / stub panes ===== */
+  .empty-state {
+    background: var(--paper-2);
+    border: 1px solid var(--paper-3);
+    border-radius: var(--radius-lg);
+    padding: 56px 32px;
+    text-align: center;
+    color: var(--ink-3);
+  }
+  .empty-state h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .empty-state p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-2);
+    max-width: 540px;
+    margin: 0 auto;
+  }
+
+  /* ===== Tab panes ===== */
+  .tab-pane { display: none; }
+  .tab-pane.active { display: block; }
+
+  /* ===== External Sources directory ===== */
+  .directory-intro {
+    background: var(--paper-2);
+    border: 1px solid var(--paper-3);
+    border-radius: var(--radius-lg);
+    padding: 20px 28px;
+    margin: 32px 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+  .directory-intro strong { color: var(--ink); }
+  .directory-cluster { margin-bottom: 36px; }
+  .directory-cluster-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--paper-3);
+  }
+  .directory-cluster-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .directory-cluster-count {
+    font-size: 12px;
+    color: var(--ink-3);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .directory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+  }
+  .directory-card {
+    background: var(--paper-2);
+    border: 1px solid var(--paper-3);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  }
+  .directory-card:hover {
+    border-color: var(--teal);
+    box-shadow: var(--shadow);
+    transform: translateY(-1px);
+  }
+  .directory-card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.25;
+  }
+  .directory-card-desc {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    flex: 1;
+  }
+  .directory-card-meta {
+    font-size: 11px;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+  }
+  .directory-card-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+  }
+  .btn-open-external {
+    background: transparent;
+    color: var(--teal-deep);
+    border: 1px solid var(--teal-deep);
+    padding: 6px 14px;
+    border-radius: var(--radius);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s, color 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-open-external:hover {
+    background: var(--teal-deep);
+    color: var(--paper);
+  }
+
+  /* ===== Header actions (Keys button) ===== */
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .header-link {
+    background: transparent;
+    border: 1px solid var(--paper-3);
+    color: var(--ink-2);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 7px 14px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: border-color 0.15s, color 0.15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .header-link:hover { border-color: var(--teal-deep); color: var(--teal-deep); }
+  .header-link .key-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--moss);
+  }
+  .header-link.needs-key .key-dot { background: #b8443c; }
+
+  /* ===== Keys first-run banner ===== */
+  .keys-banner {
+    background: var(--moss-soft);
+    border: 1px solid var(--moss);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    margin: 24px 0 -4px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--moss);
+  }
+  .keys-banner strong { color: var(--ink); }
+  .keys-banner button {
+    background: var(--moss);
+    border: 1px solid var(--moss);
+    color: var(--paper);
+    padding: 6px 14px;
+    border-radius: var(--radius);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .keys-banner button:hover { background: #36502c; border-color: #36502c; }
+
+  /* ===== Keys panel ===== */
+  .keys-panel {
+    background: var(--paper);
+    border-radius: var(--radius-lg);
+    max-width: 520px;
+    width: 100%;
+    box-shadow: 0 20px 60px rgba(26, 42, 46, 0.4);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .keys-panel h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .keys-panel-intro {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--ink-2);
+  }
+  .keys-panel-intro strong { color: var(--ink); }
+  .key-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .key-row-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .key-row-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .key-row-status {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--ink-3);
+    font-weight: 500;
+  }
+  .key-row-status.set { color: var(--moss); }
+  .key-row-hint {
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--ink-3);
+  }
+  .key-row-hint a { color: var(--teal-deep); }
+  .key-row-controls {
+    display: flex;
+    gap: 6px;
+  }
+  .key-row-controls input {
+    flex: 1;
+    background: var(--paper-2);
+    border: 1px solid var(--paper-3);
+    border-radius: var(--radius);
+    padding: 9px 12px;
+    font-family: 'Inter', monospace;
+    font-size: 13px;
+    color: var(--ink);
+    outline: none;
+  }
+  .key-row-controls input:focus {
+    border-color: var(--teal-deep);
+  }
+  .btn-key-save, .btn-key-clear {
+    padding: 9px 14px;
+    border-radius: var(--radius);
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .btn-key-save {
+    background: var(--teal-deep);
+    color: var(--paper);
+    border-color: var(--teal-deep);
+  }
+  .btn-key-save:hover { background: var(--teal); }
+  .btn-key-clear {
+    background: transparent;
+    color: var(--ink-3);
+    border-color: var(--paper-3);
+  }
+  .btn-key-clear:hover { color: var(--ink); border-color: var(--ink-3); }
+  .keys-panel-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--paper-3);
+    padding-top: 16px;
+    font-size: 11px;
+    color: var(--ink-3);
+    line-height: 1.5;
+  }
+
+  /* ===== Error notes in status bar ===== */
+  .err-note {
+    color: #8a3a30;
+    font-size: 12px;
+  }
+  .err-note + .err-note::before { content: ' · '; color: var(--ink-3); }
+
+  /* ===== Loading shimmer ===== */
+  .source-progress {
+    color: var(--ink-3);
+    font-size: 12px;
+    font-style: italic;
+  }
+
+  /* ===== Load more ===== */
+  .load-more-wrap {
+    display: none;
+    justify-content: center;
+    padding: 28px 0 8px;
+  }
+  .btn-load-more {
+    background: transparent;
+    color: var(--teal-deep);
+    border: 1px solid var(--teal-deep);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 10px 24px;
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    letter-spacing: 0.04em;
+  }
+  .btn-load-more:hover {
+    background: var(--teal-deep);
+    color: var(--paper);
+  }
+
+  /* ===== Modal description ===== */
+  .modal-description {
+    background: var(--paper-2);
+    border: 1px solid var(--paper-3);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    max-height: 180px;
+    overflow-y: auto;
+    white-space: pre-line;
+  }
+  .modal-description:empty { display: none; }
+
+  /* ===== Modal ===== */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26, 42, 46, 0.6);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--paper);
+    border-radius: var(--radius-lg);
+    max-width: 1100px;
+    width: 100%;
+    max-height: 90vh;
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(26, 42, 46, 0.4);
+  }
+  .modal-img-pane {
+    background: var(--paper-3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 500px;
+    position: relative;
+  }
+  .modal-img-pane img {
+    max-width: 100%;
+    max-height: 90vh;
+    object-fit: contain;
+    display: block;
+  }
+  .modal-info-pane {
+    padding: 24px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-y: auto;
+  }
+  .modal-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .modal-source-tag {
+    background: var(--teal-soft);
+    color: var(--teal-deep);
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .btn-close {
+    background: transparent;
+    border: 1px solid var(--paper-3);
+    color: var(--ink-2);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.15s;
+  }
+  .btn-close:hover { background: var(--paper-2); }
+  .modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .modal-meta-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--paper-3);
+    font-size: 13px;
+  }
+  .modal-meta-row:last-child { border-bottom: none; }
+  .modal-meta-key { color: var(--ink-3); font-weight: 500; }
+  .modal-meta-val { color: var(--ink); font-weight: 500; font-variant-numeric: tabular-nums; }
+
+  .license-info {
+    background: var(--moss-soft);
+    border: 1px solid var(--moss);
+    border-radius: var(--radius);
+    padding: 12px;
+    font-size: 12px;
+    color: var(--moss);
+  }
+  .license-info strong { color: var(--ink); }
+
+  .url-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-3);
+    margin-bottom: 6px;
+  }
+  .url-copy-row {
+    display: flex;
+    gap: 6px;
+  }
+  .url-copy-row input {
+    flex: 1;
+    background: var(--paper-2);
+    border: 1px solid var(--paper-3);
+    border-radius: var(--radius);
+    padding: 8px 12px;
+    font-family: 'Inter', monospace;
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .btn-copy, .btn-download, .btn-open {
+    padding: 10px 16px;
+    border-radius: var(--radius);
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    transition: background 0.15s, border-color 0.15s;
+    border: 1px solid;
+    display: inline-block;
+  }
+  .btn-copy {
+    background: var(--paper);
+    color: var(--ink);
+    border-color: var(--paper-3);
+  }
+  .btn-copy:hover { background: var(--paper-2); }
+  .btn-download {
+    background: var(--teal-deep);
+    color: var(--paper);
+    border-color: var(--teal-deep);
+    flex: 1;
+  }
+  .btn-download:hover { background: var(--teal); }
+  .btn-open {
+    background: transparent;
+    color: var(--blue-deep);
+    border-color: var(--blue-deep);
+    flex: 1;
+  }
+  .btn-open:hover { background: var(--blue-soft); }
+  .btn-row { display: flex; gap: 8px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ===== Header ===== -->
+  <header>
+    <div class="header-row">
+      <div class="brand">
+        <div class="logo">Cata<span class="logo-mark">logue</span></div>
+        <div class="tagline">a working library of source imagery</div>
+      </div>
+      <div class="header-actions">
+        <button class="header-link" id="openKeys" type="button">
+          <span class="key-dot" id="keysIndicator"></span>
+          Keys
+        </button>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-target="stock">Stock Photos</button>
+      <button class="tab" data-target="fineart">Fine Art</button>
+      <button class="tab" data-target="vector">Vector</button>
+      <button class="tab" data-target="external">External Sources</button>
+    </div>
+  </header>
+
+
+  <!-- ===== TAB PANE: STOCK PHOTOS ===== -->
+  <div class="tab-pane active" data-pane="stock">
+
+    <div class="keys-banner" id="keysBanner" style="display:none;">
+      <div><strong>Add your free API keys</strong> to enable NARA and DPLA. Internet Archive needs no key and works without setup.</div>
+      <button type="button" id="bannerOpenKeys">Set keys</button>
+    </div>
+
+    <div class="search-panel">
+      <div class="search-row">
+        <div class="search-input-wrap">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" id="stockQuery" placeholder='Search stock photos… e.g. "wanted poster" or "tenement street"'>
+        </div>
+        <button class="btn-search" id="stockSearchBtn">Search</button>
+      </div>
+
+      <div class="controls-row">
+        <div class="control-group">
+          <label>Sources</label>
+          <div class="source-chips" data-chip-group="stock-sources">
+            <button class="chip active" data-source="nara"><span class="dot dot-nara"></span>National Archives (NARA)</button>
+            <button class="chip active" data-source="dpla"><span class="dot dot-dpla"></span>Digital Public Library of America</button>
+            <button class="chip active" data-source="iarchive"><span class="dot dot-iarchive"></span>Internet Archive</button>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>Minimum Size</label>
+          <div class="toggle-wrap">
+            <label class="toggle-switch">
+              <input type="checkbox" data-size="large">
+              <span class="toggle-track"></span>
+            </label>
+            <span class="toggle-label">Large (1000+ px)</span>
+          </div>
+          <div class="toggle-wrap">
+            <label class="toggle-switch">
+              <input type="checkbox" data-size="xlarge">
+              <span class="toggle-track"></span>
+            </label>
+            <span class="toggle-label">Extra large (5000+ px)</span>
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>License</label>
+          <div class="license-notice">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path d="M5 13l4 4L19 7"/>
+            </svg>
+            Public domain only · commercial use OK
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="status-bar" id="stockStatus">
+      <div>Run a search to populate results.</div>
+      <div></div>
+    </div>
+
+    <div class="results-grid" id="stockGrid"></div>
+
+    <div class="load-more-wrap" id="loadMoreWrap">
+      <button class="btn-load-more" id="loadMoreBtn" type="button">Load more (page 2 of 2)</button>
+    </div>
+
+  </div>
+
+
+  <!-- ===== TAB PANE: FINE ART ===== -->
+  <div class="tab-pane" data-pane="fineart">
+    <div class="empty-state" style="margin-top: 32px;">
+      <h2>Coming in Phase 2</h2>
+      <p>Curated fine-art material from Library of Congress, Met Museum, Smithsonian, Cleveland Museum of Art, Art Institute of Chicago, and Wellcome Collection — all CC0 or public domain, filtered to attribution-free results only.</p>
+    </div>
+  </div>
+
+
+  <!-- ===== TAB PANE: VECTOR ===== -->
+  <div class="tab-pane" data-pane="vector">
+    <div class="empty-state" style="margin-top: 32px;">
+      <h2>Coming in Phase 3</h2>
+      <p>SVG and vector graphics from Iconify, SVG Repo, Wikimedia, and Public Domain Vectors. Style and color filters appropriate to scale-free artwork.</p>
+    </div>
+  </div>
+
+
+  <!-- ===== TAB PANE: EXTERNAL SOURCES ===== -->
+  <div class="tab-pane" data-pane="external">
+
+    <div class="directory-intro">
+      <strong>Curated directory of external collections.</strong> These institutions have valuable public-domain holdings but don't expose APIs we can search programmatically. Each card links directly to the source — browse them on their own sites, where their full context and metadata are preserved. All listed collections are in the public domain or marked "no known copyright restrictions"; commercial use is permitted, no attribution required.
+    </div>
+
+    <!-- Cluster 1: Mugshots & criminal records -->
+    <div class="directory-cluster">
+      <div class="directory-cluster-header">
+        <div class="directory-cluster-title">Mugshots &amp; Criminal Records</div>
+        <div class="directory-cluster-count">4 collections</div>
+      </div>
+      <div class="directory-grid">
+
+        <div class="directory-card">
+          <div class="directory-card-name">NSW Police Forensic Photography Archive</div>
+          <div class="directory-card-meta">Justice &amp; Police Museum, Sydney · 1910–1964</div>
+          <div class="directory-card-desc">~130,000 glass-plate and cellulose negatives from New South Wales police. The "Special Photographs" subset (~2,500 from 1910–1930) is among the most remarkable mugshot collections in existence — subjects posed themselves, often still animated by the dramas of their arrest.</div>
+          <div class="directory-card-actions">
+            <a href="https://mhnsw.au/stories/general/nsw-police-forensic-photography-archive-collection/" target="_blank" rel="noopener" class="btn-open-external">Open ↗</a>
+          </div>
+        </div>
+
+        <div class="directory-card">
+          <div class="directory-card-name">Leavenworth Federal Penitentiary Inmate Case Files</div>
+          <div class="directory-card-meta">NARA Kansas City · 1895–1957</div>
+          <div class="directory-card-desc">Historical federal prison case files, most including mugshots, accessible through NARA's online catalog. Browseable by surname index. Genuinely vast — includes figures from Robert Stroud (the Birdman of Alcatraz) to thousands of lesser-known prisoners.</div>
+          <div class="directory-card-actions">
+            <a href="https://www.archives.gov/kansas-city/finding-aids/leavenworth-penitentiary" target="_blank" rel="noopener" class="btn-open-external">Open ↗</a>
+          </div>
+        </div>
+
+        <div class="directory-card">
+          <div class="directory-card-name">PICRYL Mugshots Collection</div>
+          <div class="directory-card-meta">Aggregated PD media · global</div>
+          <div class="directory-card-desc">Curated mugshot collection pulled from NARA, state archives, and international PD sources. Easier to browse thematically than digging through NARA's catalog directly.</div>
+          <div class="directory-card-actions">
+            <a href="https://picryl.com/collections/inmate-mugshots" target="_blank" rel="noopener" class="btn-open-external">Open ↗</a>
+          </div>
+        </div>
+
+        <div class="directory-card">
+          <div class="directory-card-name">Public Record Office Victoria</div>
+          <div class="directory-card-meta">Victoria, Australia</div>
+          <div class="directory-card-desc">Historical Victorian (Australian state) prison registers with mugshots, available online. Particularly strong in late-19th and early-20th-century material. Public domain.</div>
+          <div class="directory-card-actions">
+            <a href="https://prov.vic.gov.au/explore-collection/explore-topic/justice-crime-and-law/register-male-and-female-prisoners-1855-1948" target="_blank" rel="noopener" class="btn-open-external">Open ↗</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Cluster 2: Historical & specialty photography -->
+    <div class="directory-cluster">
+      <div class="directory-cluster-header">
+        <div class="directory-cluster-title">Historical &amp; Specialty Photography</div>
+        <div class="directory-cluster-count">4 collections</div>
+      </div>
+      <div class="directory-grid">
+
+        <div class="directory-card">
+          <div class="directory-card-name">Getty Open Content Program</div>
+          <div class="directory-card-meta">J. Paul Getty Museum &amp; Research Institute · CC0</div>
+          <div class="directory-card-desc">160,000+ high-resolution images, all CC0. Particularly strong in early photography (calotypes, ambrotypes, daguerreotypes, gelatin silver, cyanotypes) and the Foto Arte Minore archive of Italian art and architecture.</div>
+          <div class="directory-card-actions">
+            <a href="https://www.getty.edu/projects/open-content-program/" target="_blank" rel="noopener" class="btn-open-external">Open ↗</a>
+          </div>
+        </div>
+
+        <div class="directory-card">
+          <div class="directory-card-name">George Eastman Museum</div>
+          <div class="directory-card-meta">Rochester, NY · photography archive</div>
+          <div class="directory-card-desc">The world's largest photography archive, especially strong in early photography. Substantial open material; access is browse-based via their online collection.</div>
+          <div class="directory-card-actions">
+            <a href="https://www.eastman.org/collections-online" target="_blank" rel="noopener" class="btn-open-external">Open ↗</a>
+          </div>
+        </div>
+
+        <div class="directory-card">
+          <div class="directory-card-name">British Library on Flickr Commons</div>
+          <div class="directory-card-meta">"Mechanical Curator" collection · 1 million+ images</div>
+          <div class="directory-card-desc">One million+ images extracted from 17th–19th century books: illustrations, maps, photographs, advertisements, ornamental letters and borders. All marked "no known copyright restrictions."</div>
+          <div class="directory-card-actions">
+            <a href="https://www.flickr.com/photos/britishlibrary" target="_blank" rel="noopener" class="btn-open-external">Open ↗</a>
+          </div>
+        </div>
+
+        <div class="directory-card">
+          <div class="directory-card-name">Library of Congress "Free to Use" Sets</div>
+          <div class="directory-card-meta">curated thematic groupings · LoC</div>
+          <div class="directory-card-desc">Curated thematic collections from LoC's holdings, specifically pre-cleared as PD or rights-cleared. A faster entry point than searching LoC's full catalog if you want a starting place by subject.</div>
+          <div class="directory-card-actions">
+            <a href="https://www.loc.gov/free-to-use/" target="_blank" rel="noopener" class="btn-open-external">Open ↗</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Cluster 3: Federal agencies -->
+    <div class="directory-cluster">
+      <div class="directory-cluster-header">
+        <div class="directory-cluster-title">Federal Agencies</div>
+        <div class="directory-cluster-count">4 collections</div>
+      </div>
+      <div class="directory-grid">
+
+        <div class="directory-card">
+          <div class="directory-card-name">FBI Vault</div>
+          <div class="directory-card-meta">Federal Bureau of Investigation · FOIA reading room</div>
+          <div class="directory-card-desc">The FBI's public FOIA reading room. Historical case files, surveillance photography from declassified investigations, vintage wanted posters (Dillinger, Bonnie &amp; Clyde, etc.). Browseable, not API-searchable.</div>
+          <div class="directory-card-actions">
+            <a href="https://vault.fbi.gov/" target="_blank" rel="noopener" class="btn-open-external">Open ↗</a>
+          </div>
+        </div>
+
+        <div class="directory-card">
+          <div class="directory-card-name">US Marshals Service Historical Photographs</div>
+          <div class="directory-card-meta">USMS · history page</div>
+          <div class="directory-card-desc">Frontier-era photography and historical Marshals operations. Smaller collection than FBI/NARA but distinct material — particularly strong on 19th-century American West.</div>
+          <div class="directory-card-actions">
+            <a href="https://www.usmarshals.gov/who-we-are/history" target="_blank" rel="noopener" class="btn-open-external">Open ↗</a>
+          </div>
+        </div>
+
+        <div class="directory-card">
+          <div class="directory-card-name">EPA DOCUMERICA</div>
+          <div class="directory-card-meta">Environmental Protection Agency · 1971–1977</div>
+          <div class="directory-card-desc">A landmark social-documentary photography project where the EPA hired photographers to document environmental conditions and everyday life across America in the early 1970s. Held at NARA, also browseable as a Flickr set.</div>
+          <div class="directory-card-actions">
+            <a href="https://www.archives.gov/research/environment/documerica-photographers" target="_blank" rel="noopener" class="btn-open-external">Open ↗</a>
+          </div>
+        </div>
+
+        <div class="directory-card">
+          <div class="directory-card-name">National Park Service Historic Photo Collection</div>
+          <div class="directory-card-meta">NPS · early 1900s onward</div>
+          <div class="directory-card-desc">Landscape and historical photography of the American national parks system since its founding. Strong on monumental landscape — Yosemite, Yellowstone, the Grand Canyon — plus historical documentation of park development.</div>
+          <div class="directory-card-actions">
+            <a href="https://npgallery.nps.gov/" target="_blank" rel="noopener" class="btn-open-external">Open ↗</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Cluster 4: Curated public-domain aggregators -->
+    <div class="directory-cluster">
+      <div class="directory-cluster-header">
+        <div class="directory-cluster-title">Curated Public-Domain Aggregators</div>
+        <div class="directory-cluster-count">6 collections</div>
+      </div>
+      <div class="directory-grid">
+
+        <div class="directory-card">
+          <div class="directory-card-name">The Public Domain Review</div>
+          <div class="directory-card-meta">curated journal · themed collections</div>
+          <div class="directory-card-desc">Curated journal of out-of-copyright works with extraordinary themed collections. Each piece checked for PD status. The "show me something I'd never have found" resource — strong on strange, beautiful, and historically unusual material.</div>
+          <div class="directory-card-actions">
+            <a href="https://publicdomainreview.org/" target="_blank" rel="noopener" class="btn-open-external">Open ↗</a>
+          </div>
+        </div>
+
+        <div class="directory-card">
+          <div class="directory-card-name">Public Domain Image Archive</div>
+          <div class="directory-card-meta">curated PD image collection</div>
+          <div class="directory-card-desc">Hand-picked PD collection from The Public Domain Review, "a living database with new images added every week." Easier to browse than Wikimedia Commons; more art-friendly than NARA.</div>
+          <div class="directory-card-actions">
+            <a href="https://pdimagearchive.org/" target="_blank" rel="noopener" class="btn-open-external">Open ↗</a>
+          </div>
+        </div>
+
+        <div class="directory-card">
+          <div class="directory-card-name">PICRYL (general)</div>
+          <div class="directory-card-meta">PD media search engine · global</div>
+          <div class="directory-card-desc">Broad PD media search engine pulling from NARA, NASA, Library of Congress, and many others. Functionally similar to DPLA but with different coverage and a more visual, browse-oriented interface.</div>
+          <div class="directory-card-actions">
+            <a href="https://picryl.com/" target="_blank" rel="noopener" class="btn-open-external">Open ↗</a>
+          </div>
+        </div>
+
+        <div class="directory-card">
+          <div class="directory-card-name">Flickr Commons</div>
+          <div class="directory-card-meta">flickr.com/commons · participating institutions</div>
+          <div class="directory-card-desc">The Flickr Commons central page listing all participating institutions worldwide. We can't API into Flickr for commercial use, but browsing it directly gives you links to the underlying institutions and their material.</div>
+          <div class="directory-card-actions">
+            <a href="https://www.flickr.com/commons" target="_blank" rel="noopener" class="btn-open-external">Open ↗</a>
+          </div>
+        </div>
+
+        <div class="directory-card">
+          <div class="directory-card-name">OPenn (Penn Libraries)</div>
+          <div class="directory-card-meta">University of Pennsylvania · open manuscripts</div>
+          <div class="directory-card-desc">Penn's open manuscript archive. Especially strong in medieval manuscripts (Ms. Codex collections) and rare books. Browse by collection rather than searching — but the material is extraordinary and entirely PD/CC0.</div>
+          <div class="directory-card-actions">
+            <a href="https://openn.library.upenn.edu/" target="_blank" rel="noopener" class="btn-open-external">Open ↗</a>
+          </div>
+        </div>
+
+        <div class="directory-card">
+          <div class="directory-card-name">The Walters Art Museum</div>
+          <div class="directory-card-meta">Baltimore · medieval &amp; Islamic manuscripts</div>
+          <div class="directory-card-desc">Strong medieval and Islamic manuscript collection. Mixed CC0 and CC-BY-SA licensing — use with awareness, browse to pick CC0-tagged items if attribution-tracking matters.</div>
+          <div class="directory-card-actions">
+            <a href="https://thewalters.org/" target="_blank" rel="noopener" class="btn-open-external">Open ↗</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ===== Keys panel ===== -->
+  <div class="modal-overlay" id="keysOverlay">
+    <div class="keys-panel">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h2>API keys</h2>
+        <button class="btn-close" id="keysClose" type="button" aria-label="Close">✕</button>
+      </div>
+      <div class="keys-panel-intro">
+        Keys live in this browser's <strong>localStorage</strong> — they aren't sent anywhere except to the source they belong to, and they aren't part of the app file. If you ever change devices or clear browser data, you'll re-enter them. Don't enter keys on a shared computer.
+      </div>
+
+      <div class="key-row">
+        <div class="key-row-header">
+          <span class="key-row-label">National Archives (NARA)</span>
+          <span class="key-row-status" id="keyNaraStatus">not set</span>
+        </div>
+        <div class="key-row-hint">
+          Free, read-only. Request by email to <strong>Catalog_API@nara.gov</strong> — they reply within a day or two with your key.
+        </div>
+        <div class="key-row-controls">
+          <input type="text" id="keyNara" placeholder="paste your NARA key…" autocomplete="off" spellcheck="false">
+          <button class="btn-key-save" id="keyNaraSave" type="button">Save</button>
+          <button class="btn-key-clear" id="keyNaraClear" type="button">Clear</button>
+        </div>
+      </div>
+
+      <div class="key-row">
+        <div class="key-row-header">
+          <span class="key-row-label">Digital Public Library of America (DPLA)</span>
+          <span class="key-row-status" id="keyDplaStatus">not set</span>
+        </div>
+        <div class="key-row-hint">
+          Free, instant. From a terminal run:<br>
+          <code style="display:inline-block; background:var(--paper-2); padding:2px 6px; border-radius:3px; font-size:11px; color:var(--teal-deep);">curl -XPOST https://api.dp.la/v2/api_key/your_email@example.com</code><br>
+          The 32-character key arrives by email.
+        </div>
+        <div class="key-row-controls">
+          <input type="text" id="keyDpla" placeholder="paste your DPLA key…" autocomplete="off" spellcheck="false">
+          <button class="btn-key-save" id="keyDplaSave" type="button">Save</button>
+          <button class="btn-key-clear" id="keyDplaClear" type="button">Clear</button>
+        </div>
+      </div>
+
+      <div class="keys-panel-footer">
+        <span>Internet Archive needs no key.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Result modal (populated dynamically by search) ===== -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-img-pane">
+        <img id="modalImage" alt="">
+      </div>
+      <div class="modal-info-pane">
+        <div class="modal-top">
+          <span class="modal-source-tag" id="modalSource"></span>
+          <button class="btn-close" id="modalClose" aria-label="Close">✕</button>
+        </div>
+        <div class="modal-title" id="modalTitle"></div>
+        <div id="modalMeta"></div>
+        <div class="modal-description" id="modalDescription"></div>
+        <div class="license-info" id="modalLicense"></div>
+        <div>
+          <div class="url-label">Image URL</div>
+          <div class="url-copy-row">
+            <input type="text" id="modalUrl" readonly value="">
+            <button class="btn-copy" id="modalCopy">Copy</button>
+          </div>
+        </div>
+        <div class="btn-row">
+          <button class="btn-download" id="modalDownload">↓ Download</button>
+          <a href="#" id="modalOpen" class="btn-open" target="_blank" rel="noopener">Open source page ↗</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ===== Tab switching =====
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.target;
+      document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t === tab));
+      document.querySelectorAll('.tab-pane').forEach(p => {
+        p.classList.toggle('active', p.dataset.pane === target);
+      });
+    });
+  });
+
+  // ===== Chip toggling =====
+  document.querySelectorAll('.chip').forEach(chip => {
+    chip.addEventListener('click', () => chip.classList.toggle('active'));
+  });
+
+  // ===== Helpers =====
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, c => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+    ));
+  }
+  function arrFirst(v) {
+    if (Array.isArray(v)) return v[0];
+    return v;
+  }
+
+  // ===== Keys (BYOK, localStorage) =====
+  const KEY_STORAGE = {
+    nara: 'catalogue_key_nara',
+    dpla: 'catalogue_key_dpla',
+  };
+  const keys = {
+    nara: localStorage.getItem(KEY_STORAGE.nara) || '',
+    dpla: localStorage.getItem(KEY_STORAGE.dpla) || '',
+  };
+
+  function saveKey(source, value) {
+    const v = (value || '').trim();
+    if (v) {
+      localStorage.setItem(KEY_STORAGE[source], v);
+      keys[source] = v;
+    } else {
+      localStorage.removeItem(KEY_STORAGE[source]);
+      keys[source] = '';
+    }
+    syncKeyUi();
+  }
+
+  function syncKeyUi() {
+    document.getElementById('keyNara').value = keys.nara;
+    document.getElementById('keyDpla').value = keys.dpla;
+    const naraStatus = document.getElementById('keyNaraStatus');
+    const dplaStatus = document.getElementById('keyDplaStatus');
+    naraStatus.textContent = keys.nara ? 'saved' : 'not set';
+    naraStatus.classList.toggle('set', !!keys.nara);
+    dplaStatus.textContent = keys.dpla ? 'saved' : 'not set';
+    dplaStatus.classList.toggle('set', !!keys.dpla);
+
+    const missing = !keys.nara || !keys.dpla;
+    document.getElementById('keysBanner').style.display = missing ? '' : 'none';
+    const headerLink = document.getElementById('openKeys');
+    headerLink.classList.toggle('needs-key', missing);
+  }
+
+  const keysOverlay = document.getElementById('keysOverlay');
+  function openKeysPanel() { syncKeyUi(); keysOverlay.classList.add('open'); }
+  function closeKeysPanel() { keysOverlay.classList.remove('open'); }
+
+  document.getElementById('openKeys').addEventListener('click', openKeysPanel);
+  document.getElementById('bannerOpenKeys').addEventListener('click', openKeysPanel);
+  document.getElementById('keysClose').addEventListener('click', closeKeysPanel);
+  keysOverlay.addEventListener('click', e => { if (e.target === keysOverlay) closeKeysPanel(); });
+
+  document.getElementById('keyNaraSave').addEventListener('click', () => saveKey('nara', document.getElementById('keyNara').value));
+  document.getElementById('keyNaraClear').addEventListener('click', () => saveKey('nara', ''));
+  document.getElementById('keyDplaSave').addEventListener('click', () => saveKey('dpla', document.getElementById('keyDpla').value));
+  document.getElementById('keyDplaClear').addEventListener('click', () => saveKey('dpla', ''));
+
+  syncKeyUi();
+
+  // ===== License filters =====
+  function dplaRightsAcceptable(rights) {
+    if (!rights) return false;
+    const s = String(Array.isArray(rights) ? rights.join(' ') : rights).toLowerCase();
+    if (/all rights reserved|by-nc|by-sa|by-nd/.test(s)) return false;
+    if (/\battribution\b/.test(s) && !/no.attribution|attribution.?free/.test(s)) {
+      if (!/public domain|no known copyright|cc0|no copyright/.test(s)) return false;
+    }
+    return /public domain|no known copyright|cc0|no copyright|pdm/.test(s);
+  }
+
+  function iaLicenseAcceptable(doc) {
+    const lic = String(doc.licenseurl || '').toLowerCase();
+    if (lic.includes('by-nc') || lic.includes('by-sa') || lic.includes('by-nd')) return false;
+    if (lic.includes('publicdomain/zero/1.0') || lic.includes('publicdomain/mark/1.0')) return true;
+    const rights = String(arrFirst(doc.rights) || '').toLowerCase();
+    const status = String(arrFirst(doc['possible-copyright-status']) || '').toLowerCase();
+    if (rights.includes('public domain') || rights.includes('no known copyright') || rights.includes('no copyright')) return true;
+    if (status.includes('not_in_copyright')) return true;
+    return false;
+  }
+
+  function naraRestrictionAcceptable(restriction) {
+    if (!restriction) return true;
+    const s = String(Array.isArray(restriction) ? restriction.join(' ') : restriction).toLowerCase().trim();
+    if (!s) return true;
+    if (s.includes('unrestricted')) return true;
+    if (s.includes('public domain')) return true;
+    return false;
+  }
+
+  // ===== NARA =====
+  async function searchNARA(query, page) {
+    if (!keys.nara) throw new Error('key required');
+    const url = new URL('https://catalog.archives.gov/api/v2/records/search');
+    url.searchParams.set('q', query);
+    url.searchParams.set('limit', '50');
+    url.searchParams.set('page', String(page));
+    url.searchParams.set('recordType', 'item');
+    const resp = await fetch(url.toString(), {
+      headers: { 'x-api-key': keys.nara, 'Accept': 'application/json' },
+    });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    const hits = data?.body?.hits?.hits || data?.hits?.hits || [];
+    const out = [];
+    for (const hit of hits) {
+      const src = hit?._source?.record || hit?._source || {};
+      const restriction = src.useRestriction || arrFirst(src.useRestrictionArray) || src.useRestrictionNote;
+      if (!naraRestrictionAcceptable(restriction)) continue;
+      const objs = src.digitalObjects || src.digitalObject || [];
+      const objsArr = Array.isArray(objs) ? objs : [objs];
+      const img = objsArr.find(o => o && (/image|jpeg|jpg|png|tif/i.test(o.objectType || '') || /\.(jpe?g|png|tif|gif)$/i.test(o.objectFilename || o.objectUrl || ''))) || objsArr[0];
+      if (!img || !img.objectUrl) continue;
+      const w = img.imageTechMetadata?.width || img.width || null;
+      const h = img.imageTechMetadata?.height || img.height || null;
+      const naId = src.naId || hit?._id || null;
+      const title = arrFirst(src.title) || img.objectFilename || 'Untitled';
+      const date = arrFirst(src.productionDateArray) || src.productionDates?.[0]?.logicalDate || arrFirst(src.coverageDateArray) || src.coverageDates?.[0]?.coverageStartDate?.logicalDate || null;
+      out.push({
+        id: 'nara-' + (naId || img.objectUrl),
+        source: 'NARA',
+        title,
+        thumbnail: img.thumbnailUrl || img.objectUrl,
+        fullImage: img.objectUrl,
+        sourceUrl: naId ? ('https://catalog.archives.gov/id/' + naId) : img.objectUrl,
+        width: w ? Number(w) : null,
+        height: h ? Number(h) : null,
+        license: 'Public Domain (NARA)',
+        date,
+        description: arrFirst(src.scopeAndContentNote) || arrFirst(src.generalNoteArray) || null,
+      });
+    }
+    return out;
+  }
+
+  // ===== DPLA (routed through corsproxy.io — DPLA's API doesn't serve CORS headers) =====
+  async function searchDPLA(query, page) {
+    if (!keys.dpla) throw new Error('key required');
+    const target = new URL('https://api.dp.la/v2/items');
+    target.searchParams.set('q', query);
+    target.searchParams.set('page_size', '50');
+    target.searchParams.set('page', String(page));
+    target.searchParams.set('sourceResource.type', 'image');
+    target.searchParams.set('api_key', keys.dpla);
+    const proxied = 'https://corsproxy.io/?url=' + encodeURIComponent(target.toString());
+    const resp = await fetch(proxied);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status + ' via proxy');
+    const data = await resp.json();
+    const docs = data?.docs || [];
+    const out = [];
+    for (const doc of docs) {
+      const sr = doc.sourceResource || {};
+      if (!dplaRightsAcceptable(sr.rights)) continue;
+      const thumb = doc.object;
+      if (!thumb) continue;
+      const isShownAt = arrFirst(doc.isShownAt);
+      const title = arrFirst(sr.title) || 'Untitled';
+      const dateField = arrFirst(sr.date);
+      const date = (dateField && (dateField.displayDate || dateField)) || null;
+      const rights = arrFirst(sr.rights);
+      out.push({
+        id: 'dpla-' + doc.id,
+        source: 'DPLA',
+        title,
+        thumbnail: thumb,
+        fullImage: thumb,
+        sourceUrl: isShownAt || ('https://dp.la/item/' + doc.id),
+        width: null,
+        height: null,
+        license: rights ? (String(rights).length > 80 ? String(rights).slice(0, 77) + '…' : String(rights)) : 'Public Domain',
+        date: typeof date === 'string' ? date : null,
+        description: arrFirst(sr.description) || null,
+      });
+    }
+    return out;
+  }
+
+  // ===== Internet Archive =====
+  async function searchInternetArchive(query, page) {
+    const safeQ = query.replace(/[\\]/g, '');
+    const lucene = `mediatype:image AND (${safeQ}) AND (licenseurl:*publicdomain* OR rights:"Public Domain" OR possible-copyright-status:"NOT_IN_COPYRIGHT")`;
+    const url = new URL('https://archive.org/advancedsearch.php');
+    url.searchParams.set('q', lucene);
+    url.searchParams.set('rows', '50');
+    url.searchParams.set('page', String(page));
+    url.searchParams.set('output', 'json');
+    ['identifier', 'title', 'licenseurl', 'rights', 'possible-copyright-status', 'date', 'creator', 'description'].forEach(f => url.searchParams.append('fl[]', f));
+    url.searchParams.append('sort[]', 'downloads desc');
+    const resp = await fetch(url.toString());
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    const docs = data?.response?.docs || [];
+    const out = [];
+    for (const doc of docs) {
+      if (!iaLicenseAcceptable(doc)) continue;
+      if (!doc.identifier) continue;
+      const title = arrFirst(doc.title) || doc.identifier;
+      const thumb = 'https://archive.org/services/img/' + encodeURIComponent(doc.identifier);
+      const lic = String(doc.licenseurl || '').toLowerCase();
+      const licLabel = lic.includes('publicdomain/zero') ? 'CC0' : (lic.includes('publicdomain/mark') ? 'Public Domain Mark' : 'Public Domain');
+      out.push({
+        id: 'ia-' + doc.identifier,
+        source: 'Internet Archive',
+        title,
+        thumbnail: thumb,
+        fullImage: thumb,
+        sourceUrl: 'https://archive.org/details/' + encodeURIComponent(doc.identifier),
+        width: null,
+        height: null,
+        license: licLabel,
+        date: arrFirst(doc.date) || null,
+        description: arrFirst(doc.description) || null,
+      });
+    }
+    return out;
+  }
+
+  // ===== Orchestration =====
+  const SOURCE_FNS = { nara: searchNARA, dpla: searchDPLA, iarchive: searchInternetArchive };
+  const SOURCE_LABEL = { nara: 'NARA', dpla: 'DPLA', iarchive: 'Internet Archive' };
+  const SESSION_CACHE = new Map();
+  const RESULTS_BY_ID = new Map();
+  let currentRunId = 0;
+
+  function cacheKey(query, sources, sizeMin) {
+    return JSON.stringify({ q: query, s: [...sources].sort(), z: sizeMin });
+  }
+
+  function getActiveSources() {
+    return [...document.querySelectorAll('[data-chip-group="stock-sources"] .chip.active')].map(c => c.dataset.source);
+  }
+
+  function getSizeMin() {
+    if (document.querySelector('[data-size="xlarge"]').checked) return 5000;
+    if (document.querySelector('[data-size="large"]').checked) return 1000;
+    return 0;
+  }
+
+  function applySizeFilter(results, sizeMin) {
+    if (!sizeMin) return results;
+    return results.filter(r => {
+      if (r.width == null && r.height == null) return true;
+      const max = Math.max(r.width || 0, r.height || 0);
+      return max >= sizeMin;
+    });
+  }
+
+  function setStatusLeft(html) {
+    document.getElementById('stockStatus').firstElementChild.innerHTML = html;
+  }
+  function setStatusRight(html) {
+    document.getElementById('stockStatus').lastElementChild.innerHTML = html;
+  }
+
+  function renderResults(results) {
+    const grid = document.getElementById('stockGrid');
+    grid.innerHTML = '';
+    for (const r of results) {
+      RESULTS_BY_ID.set(r.id, r);
+      const tile = document.createElement('div');
+      tile.className = 'tile';
+      tile.dataset.id = r.id;
+      const dim = (r.width && r.height) ? (r.width + ' × ' + r.height) : '';
+      tile.innerHTML =
+        '<img src="' + escapeHtml(r.thumbnail) + '" alt="' + escapeHtml(r.title) + '" loading="lazy" onerror="this.style.opacity=0.15">' +
+        '<div class="tile-source">' + escapeHtml(r.source) + '</div>' +
+        (dim ? '<div class="tile-meta">' + escapeHtml(dim) + '</div>' : '');
+      tile.addEventListener('click', () => openResultModal(r.id));
+      grid.appendChild(tile);
+    }
+  }
+
+  let currentSearchContext = null;
+
+  function hideLoadMore() {
+    document.getElementById('loadMoreWrap').style.display = 'none';
+  }
+  function showLoadMore(nextPage) {
+    const btn = document.getElementById('loadMoreBtn');
+    btn.textContent = 'Load more (page ' + nextPage + ' of 2)';
+    document.getElementById('loadMoreWrap').style.display = 'flex';
+  }
+  function mergeErrors(prior, added) {
+    const out = prior.slice();
+    const seen = new Set(prior);
+    for (const e of added) {
+      if (!seen.has(e)) { out.push(e); seen.add(e); }
+    }
+    return out;
+  }
+
+  async function runStockSearch(loadMore) {
+    let query, sources, sizeMin, key, page;
+
+    if (loadMore) {
+      if (!currentSearchContext || currentSearchContext.lastPage >= 2) {
+        hideLoadMore();
+        return;
+      }
+      ({ query, sources, sizeMin, key } = currentSearchContext);
+      page = currentSearchContext.lastPage + 1;
+    } else {
+      query = document.getElementById('stockQuery').value.trim();
+      if (!query) {
+        setStatusLeft('Type a query and press Enter or click Search.');
+        setStatusRight('');
+        hideLoadMore();
+        currentSearchContext = null;
+        return;
+      }
+      sources = getActiveSources();
+      if (!sources.length) {
+        setStatusLeft('Select at least one source above.');
+        setStatusRight('');
+        hideLoadMore();
+        currentSearchContext = null;
+        return;
+      }
+      sizeMin = getSizeMin();
+      key = cacheKey(query, sources, sizeMin);
+      page = 1;
+      document.getElementById('stockGrid').innerHTML = '';
+      hideLoadMore();
+
+      if (SESSION_CACHE.has(key)) {
+        const cached = SESSION_CACHE.get(key);
+        currentSearchContext = { query, sources, sizeMin, key, lastPage: cached.lastPage };
+        const filtered = applySizeFilter(cached.results, sizeMin);
+        renderResults(filtered);
+        setStatusLeft('<strong>' + filtered.length + ' result' + (filtered.length === 1 ? '' : 's') + '</strong> for "' + escapeHtml(query) + '" — cached');
+        setStatusRight(cached.errors.map(e => '<span class="err-note">' + escapeHtml(e) + '</span>').join(''));
+        if (cached.lastPage < 2) showLoadMore(cached.lastPage + 1);
+        return;
+      }
+
+      SESSION_CACHE.set(key, { results: [], lastPage: 0, errors: [] });
+    }
+
+    const cached = SESSION_CACHE.get(key);
+    const runId = ++currentRunId;
+    if (loadMore) {
+      setStatusLeft('Loading page ' + page + ' of 2…');
+    } else {
+      setStatusLeft('Searching "' + escapeHtml(query) + '" across ' + sources.length + ' source' + (sources.length === 1 ? '' : 's') + '…');
+      setStatusRight('');
+    }
+    hideLoadMore();
+
+    const pageErrors = [];
+
+    const promises = sources.map((src, idx) => new Promise(resolve => {
+      setTimeout(async () => {
+        if (runId !== currentRunId) return resolve(null);
+        try {
+          if ((src === 'nara' && !keys.nara) || (src === 'dpla' && !keys.dpla)) {
+            pageErrors.push(SOURCE_LABEL[src] + ': add your key to search this source');
+            updateStatus(query, cached.results, sizeMin, sources.length, mergeErrors(cached.errors, pageErrors));
+            return resolve([]);
+          }
+          const results = await SOURCE_FNS[src](query, page);
+          if (runId !== currentRunId) return resolve(null);
+          cached.results.push(...results);
+          renderResults(applySizeFilter(cached.results, sizeMin));
+          updateStatus(query, cached.results, sizeMin, sources.length, mergeErrors(cached.errors, pageErrors));
+          resolve(results);
+        } catch (err) {
+          pageErrors.push(SOURCE_LABEL[src] + ': ' + (err.message || 'error'));
+          updateStatus(query, cached.results, sizeMin, sources.length, mergeErrors(cached.errors, pageErrors));
+          resolve([]);
+        }
+      }, idx * 250);
+    }));
+
+    await Promise.allSettled(promises);
+    if (runId !== currentRunId) return;
+
+    cached.lastPage = page;
+    cached.errors = mergeErrors(cached.errors, pageErrors);
+    currentSearchContext = { query, sources, sizeMin, key, lastPage: page };
+
+    renderResults(applySizeFilter(cached.results, sizeMin));
+    updateStatus(query, cached.results, sizeMin, sources.length, cached.errors);
+    if (page < 2) showLoadMore(page + 1);
+    else hideLoadMore();
+  }
+
+  function updateStatus(query, allResults, sizeMin, sourceCount, errors) {
+    const filtered = applySizeFilter(allResults, sizeMin);
+    const n = filtered.length;
+    setStatusLeft('<strong>' + n + ' result' + (n === 1 ? '' : 's') + '</strong> for "' + escapeHtml(query) + '" — across ' + sourceCount + ' source' + (sourceCount === 1 ? '' : 's'));
+    if (errors.length) {
+      setStatusRight(errors.map(e => '<span class="err-note">' + escapeHtml(e) + '</span>').join(''));
+    } else {
+      setStatusRight('');
+    }
+  }
+
+  // ===== Modal =====
+  const modalOverlay = document.getElementById('modalOverlay');
+  function closeModal() { modalOverlay.classList.remove('open'); }
+  document.getElementById('modalClose').addEventListener('click', closeModal);
+  modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModal(); });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeModal();
+      closeKeysPanel();
+    }
+  });
+
+  function openResultModal(id) {
+    const r = RESULTS_BY_ID.get(id);
+    if (!r) return;
+    document.getElementById('modalSource').textContent = r.source;
+    document.getElementById('modalTitle').textContent = r.title;
+    const img = document.getElementById('modalImage');
+    img.src = r.fullImage || r.thumbnail;
+    img.alt = r.title;
+    document.getElementById('modalUrl').value = r.fullImage || r.thumbnail;
+    document.getElementById('modalOpen').href = r.sourceUrl;
+
+    const rows = [];
+    if (r.width && r.height) rows.push(['Dimensions', r.width + ' × ' + r.height + ' px']);
+    if (r.date) rows.push(['Date', r.date]);
+    rows.push(['Source', r.source]);
+    document.getElementById('modalMeta').innerHTML = rows.map(([k, v]) =>
+      '<div class="modal-meta-row"><span class="modal-meta-key">' + escapeHtml(k) + '</span><span class="modal-meta-val">' + escapeHtml(v) + '</span></div>'
+    ).join('');
+
+    document.getElementById('modalDescription').textContent = r.description ? String(r.description).trim() : '';
+
+    document.getElementById('modalLicense').innerHTML = '<strong>' + escapeHtml(r.license) + '</strong> · No attribution required. Free to remix, modify, and use commercially.';
+
+    const dl = document.getElementById('modalDownload');
+    dl.onclick = () => {
+      const a = document.createElement('a');
+      a.href = r.fullImage || r.thumbnail;
+      a.download = '';
+      a.target = '_blank';
+      a.rel = 'noopener';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    };
+
+    const cp = document.getElementById('modalCopy');
+    cp.onclick = async () => {
+      const url = r.fullImage || r.thumbnail;
+      try {
+        await navigator.clipboard.writeText(url);
+      } catch {
+        const inp = document.getElementById('modalUrl');
+        inp.select();
+        try { document.execCommand('copy'); } catch {}
+      }
+      const orig = cp.textContent;
+      cp.textContent = 'Copied!';
+      setTimeout(() => { cp.textContent = orig; }, 1500);
+    };
+
+    modalOverlay.classList.add('open');
+  }
+
+  // ===== Search wiring =====
+  document.getElementById('stockSearchBtn').addEventListener('click', () => runStockSearch(false));
+  document.getElementById('stockQuery').addEventListener('keydown', e => {
+    if (e.key === 'Enter') runStockSearch(false);
+  });
+  document.getElementById('loadMoreBtn').addEventListener('click', () => runStockSearch(true));
+</script>
+</body>
+</html>
